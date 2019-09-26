@@ -1,8 +1,8 @@
-;; This is an operating system configuration generated
-;; by the graphical installer.
-
-(use-modules (gnu))
-(use-package-modules vim tmux version-control)
+;(add-to-load-path "/home/zoid/guix-konfiguriert/modules/")
+(use-modules (gnu)
+             ((zoid profiles gui) #:prefix zoid:)
+             ((zoid profiles base) #:prefix zoid:))
+(use-package-modules shells)
 (use-service-modules desktop networking ssh xorg)
 
 (operating-system
@@ -33,14 +33,18 @@
                   (comment "Daniel Schaefer")
                   (group "users")
                   (home-directory "/home/zoid")
+                  (shell #~(string-append #$fish "/bin/fish"))
                   (supplementary-groups
                     '("wheel" "netdev" "audio" "video")))
                 %base-user-accounts))
   (packages
     (append
-      (list (specification->package "i3-wm")
-            (specification->package "nss-certs")
-             vim tmux git)
+      (map specification->package
+        (append
+           (list "nss-certs"
+                 "ansible")
+           zoid:gui-packages
+           zoid:base-packages))
       %base-packages))
   (services
     (append
