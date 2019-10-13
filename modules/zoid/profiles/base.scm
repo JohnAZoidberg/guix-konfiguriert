@@ -1,9 +1,28 @@
 (define-module (zoid profiles base)
-  #:export (base-packages))
+ #:export (zoid-base-service-type))
 
-(define base-packages
-  (list
-    "vim"
-    "tmux"
-    "tree"
-    "git"))
+(use-modules (gnu))
+
+(define zoid-etcs
+ (list `("tmux.conf" ,(local-file "../../../static/tmux.conf"))))
+
+(define zoid-accounts
+ (list (user-account
+        (name "zoid")
+        (comment "")
+        (group "users")
+        (home-directory "/home/zoid")
+        (supplementary-groups
+         '("wheel" "netdev" "audio" "video")))))
+
+(define zoid-base-service-type
+ (service-type
+  (name 'zoid-base)
+  (extensions
+   (list (service-extension account-service-type (const zoid-accounts))
+         (service-extension profile-service-type (const (map specification->package '("vim"  "git" "tmux" "direnv" "ansible"))))
+         (service-extension special-files-service-type
+                            (const `(("/bin/sh" ,(file-append (specification->package "bash") "/bin/sh"))
+                                     ("/usr/bin/env" ,(file-append coreutils "/bin/env")))))
+         (service-extension etc-service-type (const zoid-etcs))))))
+
