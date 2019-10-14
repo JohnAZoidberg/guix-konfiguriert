@@ -35,8 +35,7 @@
     %base-packages))
   (services
    (append
-    (list (service openssh-service-type)
-          (service zoid-base-service-type '())
+    (list (service zoid-base-service-type '())
           (service zoid-gui-service-type '())
           (service dhcp-client-service-type))
     %base-services)))
