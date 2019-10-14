@@ -13,6 +13,7 @@
         (comment "")
         (group "users")
         (home-directory "/home/zoid")
+        (shell #~(string-append #$(specification->package "fish") "/bin/fish"))
         (supplementary-groups
          '("wheel" "netdev" "audio" "video")))))
 
