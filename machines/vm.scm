@@ -1,8 +1,8 @@
 (add-to-load-path "modules")
 (use-modules (gnu)
-	     (zoid profiles base)
-	     (zoid profiles gui))
-(use-service-modules desktop networking ssh xorg)
+             (zoid profiles base)
+             (zoid profiles gui))
+(use-service-modules networking)
 
 (operating-system
   (locale "en_US.utf8")

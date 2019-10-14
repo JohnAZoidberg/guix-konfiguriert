@@ -17,6 +17,13 @@
         (supplementary-groups
          '("wheel" "netdev" "audio" "video")))))
 
+(define zoid-packages
+ (list "vim"
+       "git"
+       "tmux"
+       "direnv"
+       "ansible"))
+
 (define zoid-pubkey
  `("zoid" ,(plain-file "zoid.pub"
                        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOOMdHkEu2Fw4WCqZPJCh64LaKhPhDTcOaH4uH87tOIw")))
@@ -26,10 +33,10 @@
   (name 'zoid-base)
   (extensions
    (list (service-extension account-service-type (const zoid-accounts))
-         (service-extension profile-service-type (const (map specification->package '("vim"  "git" "tmux" "direnv" "ansible"))))
+         (service-extension profile-service-type
+                            (const (map specification->package zoid-packages)))
          (service-extension special-files-service-type
                             (const `(("/bin/sh" ,(file-append (specification->package "bash") "/bin/sh"))
                                      ("/usr/bin/env" ,(file-append coreutils "/bin/env")))))
          (service-extension openssh-service-type (const (list zoid-pubkey)))
          (service-extension etc-service-type (const zoid-etcs))))))
-
